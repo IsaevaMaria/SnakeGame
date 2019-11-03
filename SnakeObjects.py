@@ -47,10 +47,24 @@ class Snake:
             f.set_coord(f.get_coord()[0] + 20 * f.get_move()[0], f.get_coord()[1] + 20 * f.get_move()[1])
 
     def change_len(self):
-        f = self.snake[-1]
-        x, y = f.get_coord()[0] + 20 * f.get_move()[0], f.get_coord()[1] + 20 * f.get_move()[1]
-        new_object = Cell(x, y)
-        new_object.set_move(f.get_move()[0], f.get_move()[1])
+        x, y = self.snake[-1].get_coord()
+        s, d = self.snake[-1].get_move()
+        if s == 0:
+            if d == 1:
+                x1 = x
+                y1 = y - 20
+            else:
+                x1 = x
+                y1 = y + 20
+        elif s == 1:
+            x1 = x - 20
+            y1 = y
+        else:
+            x1 = x + 20
+            y1 = y
+
+        new_object = Cell(x1, y1)
+        new_object.set_move(s, d)
         self.snake.append(new_object)
 
 class Food:

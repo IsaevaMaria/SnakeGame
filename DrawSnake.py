@@ -14,7 +14,7 @@ class Game:
 
     def change_snake(self):
         self.fd.generate_food()
-        #self.sn.change_len()
+        self.sn.change_len()
 
     def convertion(self, x, y):
         if self.sn.get_head().get_move()[0] * x != -1 and self.sn.get_head().get_move()[1] * y != -1:
