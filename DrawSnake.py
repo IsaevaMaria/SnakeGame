@@ -6,64 +6,27 @@ size = 800, 600
 screen = pygame.display.set_mode(size)
 
 
-class Board:
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-        self.board = [[0] * width for _ in range(height)]
-        self.left = 0
-        self.top = 0
+class Game:
+    def __init__(self):
+        self.sn = Snake(100, 100)
+        self.fd = Food()
         self.cell_size = 20
 
-    def render(self, x, y):
-        pygame.draw.rect(screen, pygame.Color("white"), (x, y, 20, 20))
+    def render(self):
+        for f in self.sn.get_snake():
+            pygame.draw.rect(screen, pygame.Color("white"), (f[0], f[1], self.cell_size, self.cell_size))
 
-    def draw_food(self, list_food):
-        for f in list_food:
-            pygame.draw.rect(screen, pygame.Color("red"), (f[0], f[1], 20, 20))
+    def draw_food(self):
+        for f in self.fd.get_food():
+            pygame.draw.rect(screen, pygame.Color("red"), (f[0], f[1], self.cell_size, self.cell_size))
 
-
-
-    def set_view(self, left, top, cell_size):
-        self.left = left
-        self.top = top
-        self.cell_size = cell_size
-
-    def on_click(self, cell):
-        for i in range(self.width):
-            self.board[cell[1]][i] = (self.board[cell[1]][i] + 1) % 2
-        for i in range(self.height):
-            if i == cell[1]:
-                continue
-            self.board[i][cell[0]] = (self.board[i][cell[0]] + 1) % 2
-
-    def get_cell(self, mouse_pos):
-        cell_x = (mouse_pos[0] - self.left) // self.cell_size
-        cell_y = (mouse_pos[1] - self.top) // self.cell_size
-        if cell_x < 0 or cell_x >= self.width or cell_y < 0 or cell_y >= self.height:
-            return None
-        return cell_x, cell_y
-
-    def get_click(self, mouse_pos):
-        cell = self.get_cell(mouse_pos)
-        if cell:
-            self.on_click(cell)
-
-
-board = Board(40, 40)
-#board.set_view(50, 50, 50)
-
+game = Game()
 running = True
-sn = Snake(100, 100)
-fd = Food()
-
-x, y = sn.get_head_coords()
+x, y = game.sn.get_head_coords()
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            board.get_click(event.pos)
         if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
             x -= 10
         if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
@@ -73,7 +36,7 @@ while running:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
             y += 10
     screen.fill((0, 0, 0))
-    board.render(x, y)
-    board.draw_food(fd.get_food())
+    game.render()
+    game.draw_food()
     pygame.display.flip()
 pygame.quit()

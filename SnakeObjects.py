@@ -4,14 +4,29 @@ from random import choice
 class Cell:
     def __init__(self, x, y):
         self.coord = x, y
+        self.move = [1, 0]
 
     def get_coord(self):
         return self.coord
 
+    def set_coord(self, x, y):
+        self.coord = x, y
+
+    def get_move(self):
+        return self.move
+
+    def set_move(self, x, y):
+        try:
+            if x in range(-1, 2) and y in range(-1, 2):
+                self.move[0] = x
+                self.move[1] = y
+        except:
+            pass
+
 
 class Snake:
     def __init__(self, x, y):
-        self.snake = [Cell(x, y)]
+        self.snake = [Cell(x, y), Cell(x + 20, y), Cell(x + 40, y)]
 
     def get_head_coords(self):
         return self.snake[0].get_coord()
