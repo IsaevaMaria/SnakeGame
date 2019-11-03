@@ -16,14 +16,9 @@ class Cell:
         return self.move
 
     def set_move(self, x, y):
-        try:
-            if x in range(-1, 2) and y in range(-1, 2):
-                self.move[0] = x
-                self.move[1] = y
-
-        except:
-            pass
-
+        if x in range(-1, 2) and y in range(-1, 2):
+            self.move[0] = x
+            self.move[1] = y
 
 class Snake:
     def __init__(self, x, y):
@@ -49,20 +44,8 @@ class Snake:
     def change_len(self):
         x, y = self.snake[-1].get_coord()
         s, d = self.snake[-1].get_move()
-        if s == 0:
-            if d == 1:
-                x1 = x
-                y1 = y - 20
-            else:
-                x1 = x
-                y1 = y + 20
-        elif s == 1:
-            x1 = x - 20
-            y1 = y
-        else:
-            x1 = x + 20
-            y1 = y
-
+        x1 = x - 20 * s
+        y1 = y - 20 * d
         new_object = Cell(x1, y1)
         new_object.set_move(s, d)
         self.snake.append(new_object)

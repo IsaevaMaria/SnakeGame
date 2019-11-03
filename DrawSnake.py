@@ -4,7 +4,7 @@ from SnakeObjects import Cell, Snake, Food
 pygame.init()
 size = 800, 600
 screen = pygame.display.set_mode(size)
-
+pygame.display.set_caption('Игра "Змейка"')
 
 class Game:
     def __init__(self):
