@@ -2,7 +2,7 @@ import pygame
 from SnakeObjects import Cell, Snake, Food, Game
 
 pygame.init()
-size = 350, 450
+size = 800, 600
 screen = pygame.display.set_mode(size)
 
 
@@ -11,12 +11,16 @@ class Board:
         self.width = width
         self.height = height
         self.board = [[0] * width for _ in range(height)]
-        self.left = 10
-        self.top = 10
-        self.cell_size = 30
+        self.left = 0
+        self.top = 0
+        self.cell_size = 20
 
     def render(self, x, y):
-        pygame.draw.rect(screen, pygame.Color("white"), (x, y, 10, 10))
+        pygame.draw.rect(screen, pygame.Color("white"), (x, y, 20, 20))
+
+    def draw_food(self, list_food):
+        for f in list_food:
+            pygame.draw.rect(screen, pygame.Color("red"), (f[0], f[1], 20, 20))
 
 
 
@@ -46,12 +50,14 @@ class Board:
             self.on_click(cell)
 
 
-board = Board(5, 7)
-board.set_view(50, 50, 50)
+board = Board(40, 40)
+#board.set_view(50, 50, 50)
 
 running = True
-g = Game()
-x, y = 100, 100
+sn = Snake(100, 100)
+fd = Food()
+
+x, y = sn.get_head_coords()
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -68,5 +74,6 @@ while running:
             y += 10
     screen.fill((0, 0, 0))
     board.render(x, y)
+    board.draw_food(fd.get_food())
     pygame.display.flip()
 pygame.quit()
