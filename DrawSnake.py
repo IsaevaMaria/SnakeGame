@@ -1,5 +1,5 @@
 import pygame
-from SnakeObjects import Cell, Snake, Food, Game
+from SnakeObjects import Cell, Snake, Food
 
 pygame.init()
 size = 800, 600
@@ -12,17 +12,37 @@ class Game:
         self.fd = Food()
         self.cell_size = 20
 
+    def change_snake(self):
+        self.fd.generate_food()
+        #self.sn.change_len()
+
     def convertion(self, x, y):
         if self.sn.get_head().get_move()[0] * x != -1 and self.sn.get_head().get_move()[1] * y != -1:
-            self.sn.terra(x, y)
+            self.sn.change_move(x, y)
 
     def render(self):
+        i = 0
         for f in self.sn.get_snake():
-            pygame.draw.rect(screen, pygame.Color("white"), (f[0], f[1], self.cell_size, self.cell_size))
+            if i == 0:
+                pygame.draw.rect(screen, pygame.Color("blue"), (f[0], f[1], self.cell_size, self.cell_size))
+            else:
+                pygame.draw.rect(screen, pygame.Color("white"), (f[0], f[1], self.cell_size, self.cell_size))
+            i += 1
 
     def draw_food(self):
         for f in self.fd.get_food():
             pygame.draw.rect(screen, pygame.Color("red"), (f[0], f[1], self.cell_size, self.cell_size))
+
+    def eat_food(self):
+        s_coord = self.sn.get_head_coords()
+        self.fd.set_food([f for f in self.fd.get_food() if not(f[0] == s_coord[0] and f[1] == s_coord[1])])
+
+    def is_food_empty(self):
+        if len(self.fd.get_food()) != 0:
+            return True
+        s_coord = self.sn.get_head_coords()
+        return False
+
 
 game = Game()
 running = True
@@ -33,18 +53,18 @@ while running:
             running = False
         if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
             game.convertion(-1, 0)
-            #x -= 10
         if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
             game.convertion(1, 0)
-            #x += 10
         if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
             game.convertion(0, -1)
-            #y -= 10
         if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
             game.convertion(0, 1)
-            #y += 10
+
     screen.fill((0, 0, 0))
     game.render()
+    game.eat_food()
+    if not game.is_food_empty():
+        game.change_snake()
     game.draw_food()
     pygame.display.flip()
 pygame.quit()

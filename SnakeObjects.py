@@ -10,7 +10,6 @@ class Cell:
         return self.coord
 
     def set_coord(self, x, y):
-        print(x, y)
         self.coord = x, y
 
     def get_move(self):
@@ -21,7 +20,6 @@ class Cell:
             if x in range(-1, 2) and y in range(-1, 2):
                 self.move[0] = x
                 self.move[1] = y
-                print(x, y)
 
         except:
             pass
@@ -40,17 +38,20 @@ class Snake:
     def get_snake(self):
         return [x.get_coord() for x in self.snake]
 
-    def terra(self, x, y):
+    def change_move(self, x, y):
         for i in range(len(self.snake) - 2, -1, -1):
             s, d = self.snake[i].get_move()
             self.snake[i + 1].set_move(s, d)
         self.snake[0].set_move(x,y)
         for f in self.snake:
-            f.set_coord(f.get_coord()[0] + 20 * f.get_move()[0], f.get_coord()[1] + 20 * f.get_move()[1] )
+            f.set_coord(f.get_coord()[0] + 20 * f.get_move()[0], f.get_coord()[1] + 20 * f.get_move()[1])
 
-
-
-
+    def change_len(self):
+        f = self.snake[-1]
+        x, y = f.get_coord()[0] + 20 * f.get_move()[0], f.get_coord()[1] + 20 * f.get_move()[1]
+        new_object = Cell(x, y)
+        new_object.set_move(f.get_move()[0], f.get_move()[1])
+        self.snake.append(new_object)
 
 class Food:
     def __init__(self):
@@ -61,13 +62,14 @@ class Food:
 
     def generate_food(self):
         self.food = [(choice(range(20, 400, 20)), choice(range(20, 400, 20))) for i in range(self.count_food)]
+        print(self.food)
 
     def get_food(self):
         return self.food
 
+    def set_food(self, list_food):
+        self.food = list_food[:]
 
-class Game:
-    def __init__(self):
-        self.sn = Snake()
-        self.fd = Food()
+
+
 
