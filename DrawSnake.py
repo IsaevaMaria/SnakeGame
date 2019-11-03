@@ -12,6 +12,10 @@ class Game:
         self.fd = Food()
         self.cell_size = 20
 
+    def convertion(self, x, y):
+        if self.sn.get_head().get_move()[0] * x != -1 and self.sn.get_head().get_move()[1] * y != -1:
+            self.sn.terra(x, y)
+
     def render(self):
         for f in self.sn.get_snake():
             pygame.draw.rect(screen, pygame.Color("white"), (f[0], f[1], self.cell_size, self.cell_size))
@@ -28,13 +32,17 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-            x -= 10
+            game.convertion(-1, 0)
+            #x -= 10
         if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-            x += 10
+            game.convertion(1, 0)
+            #x += 10
         if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
-            y -= 10
+            game.convertion(0, -1)
+            #y -= 10
         if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
-            y += 10
+            game.convertion(0, 1)
+            #y += 10
     screen.fill((0, 0, 0))
     game.render()
     game.draw_food()
