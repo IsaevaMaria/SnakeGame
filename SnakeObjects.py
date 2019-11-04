@@ -27,6 +27,9 @@ class Snake:
     def get_head_coords(self):
         return self.snake[0].get_coord()
 
+    def set_head_coords(self, s):
+        self.snake[0].set_coord(s[0], s[1])
+
     def get_head(self):
         return self.snake[0]
 
@@ -39,7 +42,9 @@ class Snake:
             self.snake[i + 1].set_move(s, d)
         self.snake[0].set_move(x,y)
         for f in self.snake:
-            f.set_coord(f.get_coord()[0] + 20 * f.get_move()[0], f.get_coord()[1] + 20 * f.get_move()[1])
+            x = (f.get_coord()[0] + 20 * f.get_move()[0]) % 800
+            y = (f.get_coord()[1] + 20 * f.get_move()[1]) % 600
+            f.set_coord(x, y)
 
     def change_len(self):
         x, y = self.snake[-1].get_coord()
