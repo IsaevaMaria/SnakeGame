@@ -1,6 +1,7 @@
 from random import choice
 
-
+SCREEN_SIZE = 500, 400
+SIZE_RECT = 20
 class Cell:
     def __init__(self, x, y):
         self.coord = x, y
@@ -22,7 +23,7 @@ class Cell:
 
 class Snake:
     def __init__(self, x, y):
-        self.snake = [Cell(x, y), Cell(x + 20, y), Cell(x + 40, y)]
+        self.snake = [Cell(x, y), Cell(x + SIZE_RECT, y), Cell(x + 2 * SIZE_RECT, y)]
 
     def get_head_coords(self):
         return self.snake[0].get_coord()
@@ -42,15 +43,15 @@ class Snake:
             self.snake[i + 1].set_move(s, d)
         self.snake[0].set_move(x,y)
         for f in self.snake:
-            x = (f.get_coord()[0] + 20 * f.get_move()[0]) % 800
-            y = (f.get_coord()[1] + 20 * f.get_move()[1]) % 600
+            x = (f.get_coord()[0] + SIZE_RECT * f.get_move()[0]) % SCREEN_SIZE[0]
+            y = (f.get_coord()[1] + SIZE_RECT * f.get_move()[1]) % SCREEN_SIZE[1]
             f.set_coord(x, y)
 
     def change_len(self):
         x, y = self.snake[-1].get_coord()
         s, d = self.snake[-1].get_move()
-        x1 = x - 20 * s
-        y1 = y - 20 * d
+        x1 = x - SIZE_RECT * s
+        y1 = y - SIZE_RECT * d
         new_object = Cell(x1, y1)
         new_object.set_move(s, d)
         self.snake.append(new_object)
@@ -63,8 +64,9 @@ class Food:
         self.generate_food()
 
     def generate_food(self):
-        self.food = [(choice(range(20, 400, 20)), choice(range(20, 400, 20))) for i in range(self.count_food)]
-        print(self.food)
+        self.food = [(choice(range(SIZE_RECT, SCREEN_SIZE[0] - SIZE_RECT , SIZE_RECT)), \
+                      choice(range(SIZE_RECT, SCREEN_SIZE[1] - SIZE_RECT , SIZE_RECT))) \
+                     for i in range(self.count_food)]
 
     def get_food(self):
         return self.food

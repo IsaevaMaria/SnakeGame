@@ -2,9 +2,10 @@ import pygame
 from SnakeObjects import Cell, Snake, Food
 
 pygame.init()
-size = 800, 600
+size = 500, 400
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption('Игра "Змейка"')
+clock = pygame.time.Clock()
 
 class Game:
     def __init__(self):
@@ -26,9 +27,9 @@ class Game:
         i = 0
         for f in self.sn.get_snake():
             if i == 0:
-                pygame.draw.rect(screen, pygame.Color("blue"), (f[0], f[1], self.cell_size, self.cell_size))
+                pygame.draw.rect(screen, pygame.Color("green"), (f[0], f[1], self.cell_size, self.cell_size))
             else:
-                pygame.draw.rect(screen, pygame.Color("white"), (f[0], f[1], self.cell_size, self.cell_size))
+                pygame.draw.rect(screen, pygame.Color("yellow"), (f[0], f[1], self.cell_size, self.cell_size))
             i += 1
 
 
@@ -45,7 +46,7 @@ class Game:
     def is_food_empty(self):
         if len(self.fd.get_food()) != 0:
             return True
-        s_coord = self.sn.get_head_coords()
+        #s_coord = self.sn.get_head_coords()
         return False
 
 
@@ -54,6 +55,7 @@ class Game:
         s = self.sn.get_snake()[1:]
         if s_coord in s:
             return False
+
         return True
 
 
@@ -73,7 +75,7 @@ while running:
             game.convertion(0, -1)
         if event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
             game.convertion(0, 1)
-    screen.fill((0, 0, 0))
+    screen.fill((255, 255, 255))
     if game.game_over():
         game.render()
         game.eat_food()
